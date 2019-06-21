@@ -1,14 +1,8 @@
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-
-import javax.swing.plaf.nimbus.State;
-import java.sql.*;
 
 public class Main extends Application
 {
@@ -19,7 +13,6 @@ public class Main extends Application
 
     private MapCanvas canvas;
     private MapSelectionPane selectionPane;
-    private Stage stage;
 
     public static void main(String[] args){
         launch(args);
@@ -28,54 +21,19 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        Connection conn = null;
+        primaryStage.setTitle("Map viewer");
 
-        try
-        {
-            // initialize SQL server JDBC driver
-            Class.forName(DRIVER);
-            conn = DriverManager.getConnection(CONN_STRING);
-            Statement s = conn.createStatement();
-            ResultSet rs = s.executeQuery("SELECT MAX(PosX), MAX(PosY) FROM CITY");
-            rs.next();
-
-            double width = rs.getDouble(1);
-            double height = rs.getDouble(2);
-
-            this.canvas = new MapCanvas(width,height);
-        }
-        catch(ClassNotFoundException e)
-        {
-            new Alert(Alert.AlertType.ERROR, "Error loading JDBC driver!", ButtonType.CLOSE).showAndWait();
-            Platform.exit();
-        }
-        catch(SQLException e)
-        {
-            new Alert(Alert.AlertType.ERROR, "Error executing query!", ButtonType.CLOSE).showAndWait();
-            Platform.exit();
-        }
-        finally
-        {
-            try
-            {
-                if(conn != null)
-                    conn.close();
-            }
-            catch(SQLException e) {}
-        }
-
-        this.stage = primaryStage;
-        this.stage.setTitle("Map viewer");
+        this.canvas = new MapCanvas();
         this.selectionPane = new MapSelectionPane(this.canvas);
 
         HBox root = new HBox(10);
         root.setPadding(new Insets(10,10,10,10));
         root.getChildren().addAll(this.selectionPane,this.canvas);
 
-        Scene scene = new Scene(root,root.getWidth(),root.getHeight());
-        this.stage.setScene(scene);
-        this.stage.setResizable(false);
-        this.stage.show();
+        Scene scene = new Scene(root,root.getMinWidth(),root.getMinHeight());
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     @Override

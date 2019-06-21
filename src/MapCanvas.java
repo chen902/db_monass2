@@ -17,18 +17,23 @@ public class MapCanvas extends Canvas
     private PreparedStatement roads = null;
     private PreparedStatement max_size = null;
     private ResultSet rs = null;
+    private double width;
+    private double height;
 
-
-    public MapCanvas(double width, double height) // get map name here
+    public MapCanvas()
     {
-        super(900,700);
+        super();
 
         // initialize connection and prepared statements
         this.initializeConn();
-        this.setPreparedStatements();
+        this.setWidth(this.width);
+        this.setHeight(this.height);
 
+        this.setPreparedStatements();
         // Get the graphics context for the canvas & clear.
         gc = getGraphicsContext2D();
+
+
         clear();
     }
 
@@ -38,6 +43,7 @@ public class MapCanvas extends Canvas
 
         try
         {
+
             this.cities.setString(1,mapName);
             this.rs = this.cities.executeQuery();
             while(this.rs.next())
@@ -60,17 +66,19 @@ public class MapCanvas extends Canvas
         gc.strokeRect(0, 0, this.gc.getCanvas().getWidth(), this.gc.getCanvas().getHeight());
     }
 
-    private void resized()
-    {
-        System.out.println("resized!");
-    }
-
     private void initializeConn()
     {
         try
         {
+
             // initiate connection to database
             this.conn = DriverManager.getConnection(Main.CONN_STRING);
+            Statement s = this.conn.createStatement();
+            ResultSet rs = s.executeQuery("SELECT MAX(PosX), MAX(PosY) FROM CITY");
+            rs.next();
+            this.width = rs.getDouble(1);
+            this.height = rs.getDouble(2);
+
         } catch(SQLException e)
         {
             // in case of an error show error message and quit the application
@@ -84,9 +92,6 @@ public class MapCanvas extends Canvas
 
     private void setPreparedStatements()
     {
-        if(this.conn == null)
-            this.initializeConn();
-
         try
         {
             this.cities = this.conn.prepareStatement("SELECT M.Name,C.PosX,C.PosY " +
@@ -94,10 +99,6 @@ public class MapCanvas extends Canvas
                                                      "INNER JOIN MAP M ON M.ID = C.MapID " +
                                                      "WHERE M.Name = ?");
 
-            this.max_size = this.conn.prepareStatement("SELECT MAX(C.PosX), MAX(C.PosY) " +
-                                                       "FROM CITY C " +
-                                                       "INNER JOIN MAP M ON M.ID=C.MapID " +
-                                                       "WHERE M.Name = ?");
         }
         catch(SQLException e)
         {

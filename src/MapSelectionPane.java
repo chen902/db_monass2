@@ -68,13 +68,10 @@ public class MapSelectionPane extends VBox
             {
                 if(oldValue == null || ((String)oldValue).compareTo((String)newValue) != 0 )
                 {
-//                    new Alert(Alert.AlertType.INFORMATION, (String) newValue).showAndWait();
                     canvas.show(newValue.toString());
-
                 }
             }
         });
         getChildren().addAll(lw);
-
     }
 }
