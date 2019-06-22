@@ -7,10 +7,10 @@ import javafx.stage.Stage;
 
 public class Main extends Application
 {
-//    public static String CONN_STRING = "jdbc:sqlserver://i-mssql-01.informatik.hs-ulm.de;databaseName=kratzer_db;integratedSecurity=true";
-//    public static String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-    public static String CONN_STRING = "jdbc:mysql://localhost/kratzer_db?user=chen&password=12345678";
-    public static String DRIVER = "com.mysql.cj.jdbc.Driver";
+    public static String CONN_STRING = "jdbc:sqlserver://i-mssql-01.informatik.hs-ulm.de;databaseName=kratzer_db;integratedSecurity=true";
+    public static String DRIVER = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
+//    public static String CONN_STRING = "jdbc:mysql://localhost/kratzer_db?user=chen&password=12345678";
+//    public static String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     private MapCanvas canvas;
     private MapSelectionPane selectionPane;

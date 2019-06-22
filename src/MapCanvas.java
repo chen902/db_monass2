@@ -3,8 +3,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextArea;
+import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
 import java.awt.*;
@@ -35,7 +36,7 @@ public class MapCanvas extends Canvas
         gc = getGraphicsContext2D();
 
         clear();
-        
+
         // align text in the middle of the canvas
         Text i = new Text("Please select a map to the left");
         double x = (this.getWidth()/2) - i.getLayoutBounds().getWidth()/2;
@@ -113,11 +114,17 @@ public class MapCanvas extends Canvas
         } catch(SQLException e)
         {
             // in case of an error show error message and quit the application
-            new Alert(Alert.AlertType.ERROR,
+            Alert a = new Alert(Alert.AlertType.ERROR,
                       "Error initializing connection to the database!",
-                      ButtonType.CLOSE)
-                    .showAndWait();
-            Platform.exit();
+                      ButtonType.CLOSE);
+
+            TextArea ta = new TextArea(e.getMessage());
+            ta.setWrapText(true);
+            GridPane gp = new GridPane();
+            gp.add(ta,0,0);
+            a.getDialogPane().setExpandableContent(gp);
+            a.showAndWait();
+           Platform.exit();
         }
     }
 
