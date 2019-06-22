@@ -1,6 +1,7 @@
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
@@ -21,6 +22,8 @@ public class Main extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        this.loadDriver();
+
         primaryStage.setTitle("Map viewer");
 
         this.canvas = new MapCanvas();
@@ -42,5 +45,17 @@ public class Main extends Application
         // attempt to close all database components in canvas
         this.canvas.destroy();
         super.stop();
+    }
+
+    private void loadDriver()
+    {
+        try
+        {
+            Class.forName(DRIVER);
+        }
+        catch(ClassNotFoundException e)
+        {
+            new Alert(Alert.AlertType.ERROR,"Could not load driver: " + DRIVER).showAndWait();
+        }
     }
 }
