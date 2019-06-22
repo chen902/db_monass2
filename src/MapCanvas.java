@@ -4,7 +4,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
+import java.awt.*;
 import java.sql.*;
 
 public class MapCanvas extends Canvas
@@ -32,9 +35,11 @@ public class MapCanvas extends Canvas
         gc = getGraphicsContext2D();
 
         clear();
-        String instruction = "Please select a map to the left";
-        double x = (this.getWidth()/2);
-        gc.strokeText("Please select a map to the left", x,this.getHeight()/2);
+        
+        // align text in the middle of the canvas
+        Text i = new Text("Please select a map to the left");
+        double x = (this.getWidth()/2) - i.getLayoutBounds().getWidth()/2;
+        gc.strokeText(i.getText(),x,this.getHeight()/2);
     }
 
     public void show(String mapName)
